@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<!----------------------------------->
+<!-- Gregory Zacharko -->
+<!-- Intro to Computer Graphics -->
+<!-- Professor Rabbitz -->
+<!-- Spring 2022 Semester -->
+<!-- 4/19/2022 -->
+<!-- Lab 5 -->
+<!----------------------------------->
+<html>
+<head>
+    <title>Lab 5</title>
+
+    <!-- GUI Components -->
+    <p> </p>
+    <button id="SweepUp">Sweep Up</button>
+    <button id="SweepDown">Sweep Down</button>
+    <button id="SweepRight">Sweep Right</button>
+    <button id="SweepLeft">Sweep Left</button>
+    <button id="DollyOut">Dolly Out</button>
+    <button id="DollyIn">Dolly In</button>
+    <button id="Wireframe">Wireframe</button>
+    <p> </p>    <!-- Separates Components -->
+    <button id="ZBufferOn">zBuffer On</button>
+    <button id="ZBufferOff">zBuffer Off</button>
+    <p> </p>    <!-- Separates Components -->
+    <button id="Perspective">Perspective</button>
+    <button id="Orthographic">Orthographic</button>
+    <p> </p>    <!-- Separates Components -->
+    
+    <!-- Vertex Shader -->
+    <script id="vertex-shader" type="x-shader/x-vertex">
+    attribute vec3 vPosition;
+    attribute vec3 bcCoord;
+    attribute vec4 vColor;
+    
+    varying vec4 fColor;
+    varying vec3 vBC;
+    
+    uniform mat4 modelViewMatrix;
+    uniform mat4 projectionMatrix;
+    
+    void main() 
+    {
+        vBC = bcCoord;
+        gl_Position = projectionMatrix * modelViewMatrix * vec4(vPosition, 1.0);
+        fColor = vColor;
+    }
+    </script>
+
+    <!-- Fragment Shader -->
+    <script id="fragment-shader" type="x-shader/x-fragment">
+    precision mediump float;
+    
+    varying vec4 fColor;
+    varying vec3 vBC;
+    uniform float width;
+    
+    void main()
+    {
+        if(any(lessThan(vBC, vec3(width))))
+        {
+            gl_FragColor = fColor;
+        }
+        else
+        {
+            discard;
+        }
+    }
+    </script>
+    
+    <!-- JavaScript (JS) Files -->
+    <script type="text/javascript" src="initShaders.js"></script>
+    <script type="text/javascript" src="MVnew.js"></script>
+    <script type="text/javascript" src="box3D_V2.0.js"></script>
+</head>
+<body>
+    <canvas id="gl-canvas" width="720" height="720">
+    Oops ... your browser doesn't support the HTML5 canvas element
+    </canvas>
+</body>
+</html>
